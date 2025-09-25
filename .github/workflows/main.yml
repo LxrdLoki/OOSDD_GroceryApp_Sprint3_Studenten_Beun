@@ -29,7 +29,9 @@ jobs:
         run: dotnet workload install maui
 
       - name: Restore dependencies
-        run: dotnet restore Grocery.App/Grocery.App.csproj
+        run: |
+          dotnet restore Grocery.App/Grocery.App.csproj
+          dotnet restore TestCore/TestCore.csproj
 
       - name: Build the application
         run: dotnet build Grocery.App/Grocery.App.csproj -f net8.0-android --configuration Release --no-restore
