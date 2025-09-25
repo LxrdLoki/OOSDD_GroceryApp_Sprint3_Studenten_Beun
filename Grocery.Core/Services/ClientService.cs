@@ -16,7 +16,7 @@ namespace Grocery.Core.Services
         {
             _clientRepository = clientRepository;
         }
-        
+
         public Client? Get(string email)
         {
             return _clientRepository.Get(email);

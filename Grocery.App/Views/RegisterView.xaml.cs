@@ -2,10 +2,10 @@ using Grocery.App.ViewModels;
 
 namespace Grocery.App.Views;
 
-public partial class GroceryListItemsView : ContentPage
+public partial class RegisterView : ContentPage
 {
-    public GroceryListItemsView(GroceryListItemsViewModel viewModel)
-    {
+	public RegisterView(RegisterViewModel viewModel)
+	{
         InitializeComponent();
         BindingContext = viewModel;
     }

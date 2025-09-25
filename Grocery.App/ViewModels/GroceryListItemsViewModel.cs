@@ -15,7 +15,7 @@ namespace Grocery.App.ViewModels
         private readonly IGroceryListItemsService _groceryListItemsService;
         private readonly IProductService _productService;
         private readonly IFileSaverService _fileSaverService;
-        
+
         public ObservableCollection<GroceryListItem> MyGroceryListItems { get; set; } = [];
         public ObservableCollection<Product> AvailableProducts { get; set; } = [];
 
@@ -32,6 +32,33 @@ namespace Grocery.App.ViewModels
             Load(groceryList.Id);
         }
 
+        [RelayCommand]
+        public void Search(string searchText)
+        {
+            if (string.IsNullOrWhiteSpace(searchText))
+            {
+                GetAvailableProducts();
+            }
+            else
+            {
+                // Filter products by checking if product name contains the filled in text, ignoring cases.
+                // Then checks if product is in stock, and if it is not yet in the grocery list (as an extra check)
+                var filteredProducts = _productService.GetAll()
+                    .Where(
+                        product => product.Name.Contains(searchText, StringComparison.OrdinalIgnoreCase)
+                        && product.Stock > 0
+                        && MyGroceryListItems.All(grocery => grocery.ProductId != product.Id)
+                    );
+
+                // Clear available products list to then fill it with the filtered products
+                AvailableProducts.Clear();
+                foreach (var product in filteredProducts)
+                {
+                    AvailableProducts.Add(product);
+                }
+            }
+        }
+
         private void Load(int id)
         {
             MyGroceryListItems.Clear();
@@ -43,7 +70,7 @@ namespace Grocery.App.ViewModels
         {
             AvailableProducts.Clear();
             foreach (Product p in _productService.GetAll())
-                if (MyGroceryListItems.FirstOrDefault(g => g.ProductId == p.Id) == null  && p.Stock > 0)
+                if (MyGroceryListItems.FirstOrDefault(g => g.ProductId == p.Id) == null && p.Stock > 0)
                     AvailableProducts.Add(p);
         }
 

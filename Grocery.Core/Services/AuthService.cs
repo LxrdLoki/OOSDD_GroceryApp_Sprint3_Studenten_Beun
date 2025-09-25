@@ -18,5 +18,19 @@ namespace Grocery.Core.Services
             if (PasswordHelper.VerifyPassword(password, client.Password)) return client;
             return null;
         }
+
+        public Client? Register(string email, string password)
+        {
+            if (_clientService.Get(email) != null) return null;
+
+            // Create new client and hash password
+            Client newClient = new Client(
+                id: 0, name: email.Split('@')[0], emailAddress: email, password: PasswordHelper.HashPassword(password)
+            );
+
+            // Here the client should be saved to a database but we don't have a database intergration yet
+
+            return newClient;
+        }
     }
 }

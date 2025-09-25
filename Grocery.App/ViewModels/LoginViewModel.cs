@@ -1,8 +1,9 @@
-﻿
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Grocery.App.Views;
 using Grocery.Core.Interfaces.Services;
 using Grocery.Core.Models;
+using System.Diagnostics;
 
 namespace Grocery.App.ViewModels
 {
@@ -27,18 +28,27 @@ namespace Grocery.App.ViewModels
         }
 
         [RelayCommand]
-        private void Login()
+        private async Task Login()
         {
             Client? authenticatedClient = _authService.Login(Email, Password);
             if (authenticatedClient != null)
             {
                 LoginMessage = $"Welkom {authenticatedClient.Name}!";
                 _global.Client = authenticatedClient;
-                Application.Current.MainPage = new AppShell();
+                await Shell.Current.GoToAsync("//Home");
             }
             else
             {
                 LoginMessage = "Ongeldige inloggegevens.";
+            }
+        }
+
+        [RelayCommand]
+        private async Task Register()
+        {
+            if (_global.Client == null)
+            {
+                await Shell.Current.GoToAsync(nameof(RegisterView), true);
             }
         }
     }

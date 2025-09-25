@@ -7,7 +7,13 @@
     Shell.FlyoutBehavior="Disabled"
     Title="GroceryApp">
 
-    <TabBar>
+    <!-- To show loginview as starting page -->
+    <ShellContent
+        Route="LoginView"
+        Title="Login"
+        ContentTemplate="{DataTemplate local:LoginView}" />
+
+    <TabBar Route="Home">
         <Tab Title="Home" Icon="grocerylist.png">
             <ShellContent Title="Boodschappenlijsten" ContentTemplate="{DataTemplate local:GroceryListsView}" />
         </Tab>
