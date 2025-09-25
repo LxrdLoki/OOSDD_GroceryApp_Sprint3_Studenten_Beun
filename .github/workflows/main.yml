@@ -1,3 +1,44 @@
+# name: MAUI Unit Tests
+
+# on:
+#   release:
+#     types: [created]
+#   push:
+#     branches:
+#       - main
+#       - dev
+#       - "**"
+#   pull_request:
+#     branches:
+#       - main
+#       - dev
+
+# jobs:
+#   test:
+#     runs-on: windows-latest
+#     steps:
+#       - name: Checkout repository
+#         uses: actions/checkout@v4
+
+#       - name: Setup .NET SDK
+#         uses: actions/setup-dotnet@v3
+#         with:
+#           dotnet-version: 8.0.x
+
+#       - name: Install MAUI workloads
+#         run: dotnet workload install maui
+
+#       - name: Restore dependencies
+#         run: |
+#           dotnet restore Grocery.App/Grocery.App.csproj
+#           dotnet restore TestCore/TestCore.csproj -f net8.0-android
+
+#       - name: Build the application
+#         run: dotnet build Grocery.App/Grocery.App.csproj -f net8.0-android --configuration Release --no-restore
+
+#       - name: Run unit tests
+#         run: dotnet test TestCore/TestCore.csproj -f net8.0 --configuration Release --no-restore --verbosity normal
+
 name: MAUI Unit Tests
 
 on:
@@ -17,24 +58,30 @@ jobs:
   test:
     runs-on: windows-latest
     steps:
+      # Step 1: Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # Step 2: Setup .NET SDK (8.0)
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: 8.0.x
 
+      # Step 3: Install MAUI workloads (ensure MAUI is available)
       - name: Install MAUI workloads
         run: dotnet workload install maui
 
+      # Step 4: Restore dependencies for both projects (no framework specified for restore)
       - name: Restore dependencies
         run: |
           dotnet restore Grocery.App/Grocery.App.csproj
-          dotnet restore TestCore/TestCore.csproj -f net8.0-android
+          dotnet restore TestCore/TestCore.csproj
 
-      - name: Build the application
+      # Step 5: Build the application (Grocery.App)
+      - name: Build the application (Grocery.App)
         run: dotnet build Grocery.App/Grocery.App.csproj -f net8.0-android --configuration Release --no-restore
 
-      - name: Run unit tests
-        run: dotnet test TestCore/TestCore.csproj -f net8.0 --configuration Release --no-restore --verbosity normal
+      # Step 6: Run unit tests (TestCore)
+      - name: Run unit tests (TestCore)
+        run: dotnet test TestCore/TestCore.csproj -f net8.0-android --configuration Release --no-restore --verbosity normal
