@@ -31,7 +31,7 @@ jobs:
       - name: Restore dependencies
         run: |
           dotnet restore Grocery.App/Grocery.App.csproj
-          dotnet restore TestCore/TestCore.csproj
+          dotnet restore TestCore/TestCore.csproj -f net8.0-android
 
       - name: Build the application
         run: dotnet build Grocery.App/Grocery.App.csproj -f net8.0-android --configuration Release --no-restore
